@@ -30,7 +30,7 @@ def load_file(filename):
 
 
 def load_config(config, filename):
-    '''injects key = value pairs from filename directly into config using setattr'''
+    '''key = value in filename becomes config[key] = value'''
     config_lines = load_file(filename).split(u'\n')
     for line in config_lines:
         line = strutil.until(line, u'#')
@@ -38,4 +38,4 @@ def load_config(config, filename):
             continue
         key, value = line.split(u'=', 1)
         key, value = key.strip(), value.strip()
-        setattr(config, key, value)
+        config[key] = value
