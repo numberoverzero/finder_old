@@ -1,0 +1,16 @@
+{
+	"folders":
+	[
+		{
+			"path": "/D/Workspace/PythonWorkspace/searchapi_env/mtg_search"
+		}
+	],
+    "build_systems":
+    [
+        {
+        "name": "Search API Env Run",
+        "working_dir": "D:\\Workspace\\PythonWorkspace\\searchapi_env\\mtg_search",
+        "cmd": ["D:\\Workspace\\PythonWorkspace\\searchapi_env\\Scripts\\python.exe", "$file"]
+        }
+    ]
+}
