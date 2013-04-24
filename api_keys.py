@@ -8,13 +8,13 @@ from mtg_search import app
 DERIVED_KEY_LIFETIME = int(app.config['DERIVED_KEY_LIFETIME'])
 DERIVED_KEY_LENGTH = int(app.config['DERIVED_KEY_LENGTH'])
 
-conn = boto.dynamodb.connect_to_region(
+_conn = boto.dynamodb.connect_to_region(
     app.config['DYNAMODB_REGION'],
     aws_access_key_id=app.config['AWS_ACCESS_KEY_ID'],
     aws_secret_access_key=app.config['AWS_SECRET_ACCESS_KEY']
 )
-dk_table = conn.get_table(app.config['DERIVED_KEY_TABLE'])
-pk_table = conn.get_table(app.config['PRIMARY_KEY_TABLE'])
+dk_table = _conn.get_table(app.config['DERIVED_KEY_TABLE'])
+pk_table = _conn.get_table(app.config['PRIMARY_KEY_TABLE'])
 
 
 def _get_primary_key(key):

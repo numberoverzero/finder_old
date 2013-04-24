@@ -1,8 +1,9 @@
 from functools import wraps
 from flask.ext.restful import Resource, fields, marshal_with, abort
-from mtg_search import api, db
+from mtg_search import app, api, mongo
 from api_keys import derive_key, validate_derived_key, get_derived_key_expiration
-from mtg_search.models import CardName
+from mtg_search.util import timed
+
 
 gen_fields = {
     'key': fields.Raw,
@@ -39,8 +40,9 @@ api.add_resource(ValidateKey, '/validate/<string:derived_key>')
 def authenticated(func):
     @wraps(func)
     def wrapper(*args, **kwargs):
-        api_key = kwargs.pop('api_key', None)
-        valid = validate_derived_key(api_key)
+        with timed(lambda d: app.logger.info("Checked key in {} seconds".format(d))):
+            api_key = kwargs.pop('api_key', None)
+            valid = validate_derived_key(api_key)
         if not valid:
             abort(403, message="Unauthenticated call.")
         return func(*args, **kwargs)
@@ -50,12 +52,7 @@ def authenticated(func):
 class GetCardIds(Resource):
     @authenticated
     def get(self, card_name):
-        name = db.session.query(CardName).filter(CardName.name.ilike(card_name)).first()
-        if name:
-            cards = name.cards
-            mvids = [card.multiverse_id for card in cards]
-        else:
-            mvids = []
-        return {'name': card_name, 'ids': mvids}
+        # Use mongo.db.cards
+        return {'name': card_name, 'ids': ['A', 'B']}
 
 api.add_resource(GetCardIds, '/<string:api_key>/ids/<string:card_name>')

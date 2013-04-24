@@ -1,4 +1,4 @@
-from flask.ext import restful, sqlalchemy
+from flask.ext import restful, pymongo
 from flask import Flask
 
 from util import fileutil
@@ -10,6 +10,6 @@ fileutil.set_root(__file__)
 app = Flask(__name__)
 fileutil.load_config(app.config, '.config')
 api = restful.Api(app)
-db = sqlalchemy.SQLAlchemy(app)
+mongo = pymongo.PyMongo(app)
 
 import mtg_search.views
